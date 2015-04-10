@@ -179,7 +179,7 @@ void Graph<U>::build() //Function to build the graph one vertex at a time
     if(vertices.size()>0) //If there is more than one vertex in the vertex list,
     {
         char answer = 'N';
-        for(int i=1;i<vertices.size();i++) //In this for-loop is code to connect
+        for(int i=1;i<vertices.size();i++) //In this for-loop is code to connect the newly added vertex to whichever existing vertices the user wants to
         {
             cout << "Connect this vertex to the vertex titled '" << (vertices.at(i-1)).data << "'?(Y-yes, N-no)" << endl;
             cin >> answer;
@@ -195,7 +195,7 @@ void Graph<U>::build() //Function to build the graph one vertex at a time
 }
 
 template<typename U>
-void Graph<U>::out()
+void Graph<U>::out() //Code for debugging purposes only to output the data and connections of each vertex; other functions won't work after running this.
 {
     for(int i=0;i<vertices.size();i++)
     {
@@ -211,16 +211,16 @@ void Graph<U>::out()
 }
 
 template<typename U>
-void Graph<U>::connected()
+void Graph<U>::connected() //Function to tell if the graph is connected or not
 {
     bool isConnected = 1;
     for(int i=0;i<25;i++)
-        visited.push_back(0);
+        visited.push_back(0); //Initialize the visited array to all zeros(not visited)
     int choice = 1;
     int starting;
     cout << "This function uses DFS or BFS to determine if the graph is connected.\n";
     cout << "Enter 1 for DFS or 2 for BFS: ";
-    cin >> choice;
+    cin >> choice; //Choose to run the DFS or BFS function to determine connectivity
     if(choice == 1)
     {
         cout << "Which vertex to start with? Enter 0-" << vertices.size()-1 << endl;
@@ -233,33 +233,33 @@ void Graph<U>::connected()
         cin >> starting;
         BFS(starting);
     }
-    for(int k=0;k<(vertices.size());k++)
+    for(int k=0;k<(vertices.size());k++) //Use the visited array populated by DFS or BFS to determine connectivity
     {
         if(visited[k])
             isConnected = 1*isConnected;
         else
             isConnected = 0*isConnected;
     }
-    if(isConnected)
+    if(isConnected) //Output whether or not the graph is connected
         cout << "The graph is connected!" << endl;
     else
         cout << "The graph is not connected" << endl;
-    for(int k=0;k<(vertices.size());k++)
+    for(int k=0;k<(vertices.size());k++) //Reset the visited array to not connected so as not to mess with it running again.
     {
         visited[k] = 0;
     }
 }
 
 template<typename U>
-void Graph<U>::DFS(int v)
+void Graph<U>::DFS(int v) //Function to perform Depth First Search
 {
     int sizeV = vertices.at(v).adjacencyList.size();
-    if(visited.size() <= v)
+    if(visited.size() <= v) //Make sure the visited array is big enough
     {
         visited.resize(v+1);
     }
-    visited[v] = 1;
-    for(int i=0; i<sizeV; i++)
+    visited[v] = 1; //Set the current vertex to visited
+    for(int i=0; i<sizeV; i++) //Recursively visit every unvisited vertex that can be accessed from the current vertex
     {
         if(!(visited.at(vertices.at(v).adjacencyList.front())))
         {
@@ -273,17 +273,17 @@ void Graph<U>::DFS(int v)
 }
 
 template<typename U>
-void Graph<U>::BFS(int v)
+void Graph<U>::BFS(int v) //Function to perform Breadth First Search
 {
-    Queue<int> Q(25);
+    Queue<int> Q(25); //Declare Variables
     int temp;
-    if(visited.size() <= v)
+    if(visited.size() <= v) //Make sure the visited array is big enough
     {
         visited.resize(v+1);
     }
-    visited[v] = 1;
-    Q.addQ(v);
-    while(!Q.emptyQ())
+    visited[v] = 1; //Set the current vertex to visited
+    Q.addQ(v); //Add the current vertex to the queue
+    while(!Q.emptyQ()) //While the queue isn't empty, add all vertices that aren't visited and are accessible from the current queue to the queue, then mark them as visited
     {
         int temp = Q.delQ();
         while(vertices.at(v).adjacencyList.size()>0)
